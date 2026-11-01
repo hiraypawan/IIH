@@ -134,12 +134,26 @@
           }
         });
       },
-      { threshold: 0.08, rootMargin: "0px 0px -6% 0px" },
+      { threshold: 0, rootMargin: "0px 0px 20% 0px" },
     );
 
     revealItems.forEach(function (item) {
       revealObserver.observe(item);
     });
+
+    window.addEventListener(
+      "scroll",
+      function () {
+        revealItems.forEach(function (item) {
+          if (item.classList.contains("is-visible")) return;
+          var rect = item.getBoundingClientRect();
+          if (rect.top < window.innerHeight + 240) {
+            item.classList.add("is-visible");
+          }
+        });
+      },
+      { passive: true },
+    );
 
     window.setTimeout(function () {
       revealItems.forEach(function (item) {
@@ -194,13 +208,11 @@
      ========================================================= */
 
   var feeClass = document.getElementById("feeClass");
-  var feeMode = document.getElementById("feeMode");
   var feeLink = document.getElementById("feeLink");
 
   function updateFeeLink() {
-    if (!feeClass || !feeMode || !feeLink) return;
+    if (!feeClass || !feeLink) return;
     var chosenClass = feeClass.value;
-    var chosenMode = feeMode.value;
     var waitNote =
       chosenClass === "10th"
         ? " I understand Class 10 is on the waitlist."
@@ -208,16 +220,13 @@
     var message =
       "Hi IIH, please share the fee for Class " +
       chosenClass +
-      " (" +
-      chosenMode +
-      ")." +
+      " (online classes)." +
       waitNote;
     feeLink.href =
       "https://wa.me/918468888593?text=" + encodeURIComponent(message);
   }
 
   if (feeClass) feeClass.addEventListener("change", updateFeeLink);
-  if (feeMode) feeMode.addEventListener("change", updateFeeLink);
   updateFeeLink();
 
   /* Active desktop navigation
