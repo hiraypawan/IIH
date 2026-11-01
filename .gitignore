@@ -1,0 +1,15 @@
+# Local originals & temp (root only)
+/iih_x5f_final_x5f_no_x5f_location (3).html
+/backup-iih-original.html
+/app.js
+/app.pretty.js
+/styles.css
+/prettier.err
+
+# QA artifacts
+shots/
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
