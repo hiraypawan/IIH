@@ -827,14 +827,38 @@
               </div>
 
               <div>
-                <div class="lesson-preview" aria-hidden="true">
-                  <div class="lesson-screen">
-                    <span class="lesson-chip chip-one">Concept</span>
-                    <span class="lesson-chip chip-two">Story</span>
-                    <span class="lesson-chip chip-three">Recall</span>
-                    <span class="play-btn"
-                      ><svg class="icon"><use href="#i-play"></use></svg
-                    ></span>
+                <div class="lesson-preview">
+                  <div class="lesson-screen" id="reelScreen">
+                    <span class="lesson-chip chip-one" aria-hidden="true"
+                      >Concept</span
+                    >
+                    <span class="lesson-chip chip-two" aria-hidden="true"
+                      >Story</span
+                    >
+                    <span class="lesson-chip chip-three" aria-hidden="true"
+                      >Recall</span
+                    >
+                    <button
+                      class="play-btn"
+                      id="reelPlay"
+                      type="button"
+                      aria-label="Play the IIH short video for parents"
+                    >
+                      <svg class="icon" aria-hidden="true">
+                        <use href="#i-play"></use>
+                      </svg>
+                    </button>
+                    <button
+                      class="lesson-close"
+                      id="reelClose"
+                      type="button"
+                      aria-label="Close the video"
+                      hidden
+                    >
+                      <svg class="icon" aria-hidden="true">
+                        <use href="#i-x"></use>
+                      </svg>
+                    </button>
                   </div>
                   <div class="lesson-caption">
                     <span class="dot"></span> A visual first, then the

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="posterTitle posterDesc">
+  <title id="posterTitle">IIH: A short for parents</title>
+  <desc id="posterDesc">Dark navy video preview with the title A short for parents and a white play button.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1322" />
+      <stop offset="1" stop-color="#071a1b" />
+    </linearGradient>
+    <radialGradient id="glow" cx="86%" cy="12%" r="62%">
+      <stop offset="0" stop-color="#14b8a6" stop-opacity="0.42" />
+      <stop offset="1" stop-color="#14b8a6" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="playGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.18" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg)" />
+  <rect width="1200" height="675" fill="url(#glow)" />
+
+  <g fill="none" stroke="#99f6e4" stroke-opacity="0.16">
+    <circle cx="930" cy="338" r="250" />
+    <circle cx="930" cy="338" r="178" />
+    <circle cx="930" cy="338" r="104" />
+  </g>
+
+  <circle cx="930" cy="338" r="128" fill="url(#playGlow)" filter="url(#soft)" />
+
+  <g font-family="'Plus Jakarta Sans', Arial, sans-serif">
+    <g>
+      <rect x="72" y="82" width="120" height="38" rx="19" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.16" />
+      <text x="132" y="107" text-anchor="middle" font-size="15" font-weight="700" fill="#99f6e4">IIH</text>
+    </g>
+    <text x="72" y="212" font-family="Georgia, 'Times New Roman', serif" font-size="62" font-weight="700" fill="#ffffff">A short for</text>
+    <text x="72" y="282" font-family="Georgia, 'Times New Roman', serif" font-size="62" font-weight="700" fill="#5eead4">parents.</text>
+    <text x="72" y="338" font-size="21" fill="#cbd5e1">What if learning began with understanding?</text>
+
+    <g font-size="14" font-weight="700">
+      <rect x="72" y="402" width="108" height="36" rx="18" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.14" />
+      <text x="126" y="425" text-anchor="middle" fill="#dbeafe">Concept</text>
+      <rect x="196" y="402" width="88" height="36" rx="18" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.14" />
+      <text x="240" y="425" text-anchor="middle" fill="#dbeafe">Story</text>
+      <rect x="300" y="402" width="94" height="36" rx="18" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.14" />
+      <text x="347" y="425" text-anchor="middle" fill="#dbeafe">Recall</text>
+    </g>
+
+    <g>
+      <circle cx="78" cy="606" r="5" fill="#2dd4bf" />
+      <text x="94" y="612" font-size="17" fill="#cbd5e1">A visual first, then the explanation</text>
+    </g>
+  </g>
+</svg>

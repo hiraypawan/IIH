@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)https://boba.page/4hXNKXE785QS6IJaoZKWPw/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#060b15"><meta name="robots" content="noindex, nofollow, noarchive"><title>IIH | A short for parents</title><style>html,body{margin:0;height:100%;background:#060b15}iframe{border:0;width:100%;height:100%;visibility:hidden;display:block}</style></head><body><iframe id="player" title="IIH short for parents" allow="autoplay" src="./IIH _ A short for parents_files/index.html" style="visibility: visible;"></iframe><script>
+const player=document.getElementById('player');
+function updatePlayer(){
+ try{
+  const nested=player.contentDocument.querySelector('iframe');
+  const d=nested&&nested.contentDocument;
+  if(!d||!d.defaultView.__iihReel){setTimeout(updatePlayer,100);return}
+  const s=d.createElement('script');
+  s.textContent='('+function(){
+   const R=window.__iihReel;
+   if(!R)return;
+   let voiceFailed=false;
+   const oldNotice=voiceNotice,oldPaint=paint,oldChoice=langChoice;
+   const text=(id,v)=>{const el=get(id);if(el&&el.textContent!==v)el.textContent=v};
+   function notice(){
+    const msg=muted?'Sound off · English subtitles stay on':(voiceFailed||!R.voice)?'Voiceover for this language is unavailable on this device; subtitles will continue.':R.fallback?'No Marathi voice is available on this device, so the closest available Hindi voice is being used.':'';
+    text('notice',msg);
+   }
+   function english(){
+    document.documentElement.lang='en';
+    const startText=document.querySelector('.start p');if(startText&&startText.textContent!=='Choose a voiceover language')startText.textContent='Choose a voiceover language';
+    const labels={en:'English',hi:'Hindi',mr:'Marathi'};
+    document.querySelectorAll('.choice').forEach(b=>{if(b.textContent!==labels[b.dataset.lang])b.textContent=labels[b.dataset.lang]});
+    document.querySelectorAll('#select option').forEach(o=>{if(o.textContent!==labels[o.value])o.textContent=labels[o.value]});
+    get('select').setAttribute('aria-label','Voiceover language');
+    text('startPlay','▶  Play the reel');text('startFoot','Duration adapts to speech · English subtitles always on');
+    text('brandSub','Class 7–10 · Online');
+    text('headline',D.en.h[R.index]);text('sub',D.en.s[R.index]);
+    text('site','Visit website ↗');text('call','Call 84688 88593');text('whatsapp','WhatsApp');
+    get('toggle').setAttribute('aria-label',playing?'Pause':'Play');get('replay').setAttribute('aria-label','Replay');get('sound').setAttribute('aria-label',muted?'Unmute':'Mute');get('progress').setAttribute('aria-label','Seek reel');
+    notice();
+   }
+   function englishReadingSeconds(index){return Math.max(2.5,D.en.s[index].trim().split(/\s+/).filter(Boolean).length/150*60+.5)}
+   function extendReading(index){if(playing&&R.index===index&&(R.mode==='reading'||R.mode==='buffer'))R.deadline=Math.max(R.deadline,R.start+englishReadingSeconds(index)*1000)}
+   voiceNotice=function(){oldNotice();notice()};
+   paint=function(animate){oldPaint(animate);english();let index=R.index;queueMicrotask(()=>extendReading(index))};
+   langChoice=function(l){voiceFailed=false;oldChoice(l);english()};
+   if('speechSynthesis' in window){
+    const synth=window.speechSynthesis,originalSpeak=synth.speak.bind(synth);
+    synth.speak=function(u){
+     voiceFailed=false;let index=R.index,token=R.token;
+     u.addEventListener('start',()=>{if(token===R.token){voiceFailed=false;notice()}});
+     u.addEventListener('error',e=>{if(token===R.token&&e.error!=='interrupted'&&e.error!=='canceled'){voiceFailed=true;notice()}});
+     u.addEventListener('end',()=>{if(token===R.token)queueMicrotask(()=>extendReading(index))});
+     return originalSpeak(u);
+    };
+   }
+   new MutationObserver(notice).observe(get('notice'),{childList:true,characterData:true,subtree:true});
+   for(const id of ['timer','beat']){const el=get(id);Object.defineProperty(el,'title',{configurable:true,get(){return 'Estimated total'},set(){el.setAttribute('title','Estimated total')}});el.title='Estimated total'}
+   english();
+   window.__englishVoiceOnlyFix=true;
+  }.toString()+')();';
+  d.body.appendChild(s);
+  if(d.defaultView.__englishVoiceOnlyFix)player.style.visibility='visible';
+ }catch(e){console.error('Unable to load reel',e)}
+}
+player.addEventListener('load',updatePlayer);
+</script><script type="module" src="./IIH _ A short for parents_files/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;7b72d1637df14133b5a9042c2a923bdb&quot;,&quot;r&quot;:1,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
+</body></html>

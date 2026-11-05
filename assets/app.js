@@ -276,4 +276,49 @@
       navObserver.observe(heroSection);
     }
   }
+
+  /* Parent reel player
+     ========================================================= */
+
+  var reelScreen = document.getElementById("reelScreen");
+  var reelPlay = document.getElementById("reelPlay");
+  var reelClose = document.getElementById("reelClose");
+
+  if (reelScreen && reelPlay) {
+    var reelFrame = null;
+
+    function closeReel() {
+      if (reelFrame && reelFrame.parentNode) {
+        reelFrame.parentNode.removeChild(reelFrame);
+      }
+      reelFrame = null;
+      reelScreen.classList.remove("is-playing");
+      if (reelClose) reelClose.hidden = true;
+      reelPlay.hidden = false;
+      reelPlay.focus({ preventScroll: true });
+    }
+
+    function openReel() {
+      if (reelFrame) return;
+      reelFrame = document.createElement("iframe");
+      reelFrame.src = "parents/";
+      reelFrame.title = "IIH short video for parents";
+      reelFrame.setAttribute("allow", "autoplay; fullscreen");
+      reelFrame.setAttribute("allowfullscreen", "");
+      reelScreen.appendChild(reelFrame);
+      reelScreen.classList.add("is-playing");
+      reelPlay.hidden = true;
+      if (reelClose) {
+        reelClose.hidden = false;
+        reelClose.focus({ preventScroll: true });
+      }
+    }
+
+    reelPlay.addEventListener("click", openReel);
+    if (reelClose) reelClose.addEventListener("click", closeReel);
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && reelFrame) closeReel();
+    });
+  }
 })();
