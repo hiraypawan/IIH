@@ -1,17 +1,16 @@
 #!/usr/bin/env node
 // Generate parent-reel voice-over audio using Google Gemini TTS.
 // Usage: GEMINI_API_KEY=... node scripts/generate-parent-tts.js
-// Output: assets/audio/parent/{en,hi,mr}/00.wav ... 39.wav
+// Output: assets/audio/parent/{en,hi,mr}/0.wav ... 39.wav
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
 const ROOT = path.resolve(__dirname, '..');
 const OUT_BASE = path.join(ROOT, 'assets', 'audio', 'parent');
-const WRAPPER = path.join(ROOT, 'parents', 'IIH _ A short for parents_files', 'index.html');
+const REEL = path.join(ROOT, 'parents', 'IIH _ A short for parents_files', 'index(1).html');
 const MODEL = 'gemini-2.5-flash-preview-tts';
 const VOICE = { en: 'Kore', hi: 'Kore', mr: 'Kore' };
-const LANG_CODE = { en: 'en-US', hi: 'hi-IN', mr: 'mr-IN' };
 const SLEEP_MS = 6500; // free tier ~10 RPM
 
 const apiKey = process.env.GEMINI_API_KEY;
@@ -20,24 +19,31 @@ if (!apiKey) {
   process.exit(1);
 }
 
-// Extract the 40 English lines from the wrapper.
-const wrapperSrc = fs.readFileSync(WRAPPER, 'utf8');
-const m = wrapperSrc.match(/const lines=\[([\s\S]*?)\];/);
-if (!m) { console.error('Could not find lines array'); process.exit(1); }
-const lines = eval('[' + m[1] + ']');
-if (!Array.isArray(lines) || lines.length === 0) { console.error('Bad lines'); process.exit(1); }
-console.log('Found', lines.length, 'lines');
-
-// Hindi/Marathi lines are embedded in the reel; for now use English lines for all.
-// (Replace with translated arrays if available.)
-const texts = { en: lines, hi: lines, mr: lines };
+// Extract D (en/hi/mr subtitle arrays) from the reel.
+const reelSrc = fs.readFileSync(REEL, 'utf8');
+const i = reelSrc.indexOf('const D=');
+let depth = 0, inStr = false, strCh = '', esc = false, j = i + 'const D='.length;
+while (j < reelSrc.length && reelSrc[j] !== '{') j++;
+for (; j < reelSrc.length; j++) {
+  const c = reelSrc[j];
+  if (inStr) { if (esc) { esc = false; continue; } if (c === '\\') { esc = true; continue; } if (c === strCh) inStr = false; continue; }
+  if (c === '"' || c === "'" || c === '`') { inStr = true; strCh = c; continue; }
+  if (c === '{') depth++;
+  else if (c === '}') { depth--; if (depth === 0) { j++; break; } }
+}
+if (reelSrc[j] === ';') j++;
+const code = reelSrc.slice(i, j).replace('const D=', 'global.D=');
+eval(code);
+if (!global.D || !global.D.en || !global.D.hi || !global.D.mr) { console.error('Could not parse D'); process.exit(1); }
+const texts = { en: global.D.en.s, hi: global.D.hi.s, mr: global.D.mr.s };
+console.log('Found', texts.en.length, 'lines per language');
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-function generate(text, voice, lang) {
+function generate(text, voice) {
   return new Promise((resolve, reject) => {
     const body = JSON.stringify({
-      contents: [{ parts: [{ text: `Read aloud in a warm, natural voice: ${text}` }] }],
+      contents: [{ parts: [{ text: 'Read aloud in a warm, natural voice: ' + text }] }],
       generationConfig: {
         responseModalities: ['AUDIO'],
         speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } } },
@@ -45,7 +51,7 @@ function generate(text, voice, lang) {
     });
     const req = https.request({
       hostname: 'generativelanguage.googleapis.com',
-      path: `/v1beta/models/${MODEL}:generateContent?key=${apiKey}`,
+      path: '/v1beta/models/' + MODEL + ':generateContent?key=' + apiKey,
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
     }, (res) => {
@@ -54,10 +60,9 @@ function generate(text, voice, lang) {
       res.on('end', () => {
         try {
           const j = JSON.parse(data);
-          const b64 = j?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+          const b64 = j && j.candidates && j.candidates[0] && j.candidates[0].content && j.candidates[0].content.parts && j.candidates[0].content.parts[0] && j.candidates[0].content.parts[0].inlineData && j.candidates[0].content.parts[0].inlineData.data;
           if (!b64) { reject(new Error('No audio: ' + JSON.stringify(j).slice(0, 300))); return; }
           const pcm = Buffer.from(b64, 'base64');
-          // Wrap PCM (24kHz, 16-bit, mono) in WAV header.
           const wav = pcmToWav(pcm, 24000, 1, 16);
           resolve(wav);
         } catch (e) { reject(e); }
@@ -96,11 +101,11 @@ function pcmToWav(pcm, sampleRate, channels, bits) {
     const dir = path.join(OUT_BASE, lang);
     fs.mkdirSync(dir, { recursive: true });
     for (let i = 0; i < texts[lang].length; i++) {
-      const out = path.join(dir, `${i}.wav`);
-      if (fs.existsSync(out)) { console.log(`skip ${lang}/${i}`); continue; }
-      process.stdout.write(`gen ${lang}/${i}... `);
+      const out = path.join(dir, i + '.wav');
+      if (fs.existsSync(out)) { console.log('skip ' + lang + '/' + i); continue; }
+      process.stdout.write('gen ' + lang + '/' + i + '... ');
       try {
-        const wav = await generate(texts[lang][i], VOICE[lang], LANG_CODE[lang]);
+        const wav = await generate(texts[lang][i], VOICE[lang]);
         fs.writeFileSync(out, wav);
         console.log('ok');
       } catch (e) {
