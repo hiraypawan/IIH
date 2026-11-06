@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "/geometry-chapter-1.html",
+      "destination": "/lessons/geometry-chapter-1.html",
+      "permanent": false
+    },
+    {
+      "source": "/geometry-chapter-1",
+      "destination": "/lessons/geometry-chapter-1.html",
+      "permanent": false
+    }
+  ]
+}
